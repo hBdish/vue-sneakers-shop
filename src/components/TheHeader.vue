@@ -11,7 +11,7 @@
     <ul class="flex items-center gap-4 text-slate-600">
       <li class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold">
         <img src="/cart.svg" alt="Cart" />
-        <span>1200 руб</span>
+        <span>1200 rub</span>
       </li>
       <li class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold">
         <img src="/heart.svg" alt="Heart" />
