@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import TheHeader from '@/components/TheHeader.vue'
 import ListSnickers from '@/components/ListSnickers/ListSnickers.vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import type { Sneaker } from '@/types/sneakers'
+
+let sneakers = ref<Sneaker[]>([])
+
+onMounted(async () => {
+  try {
+    const { data } = await axios.get<Sneaker[]>('http://localhost:1234/items')
+    sneakers.value = data
+  } catch (e) {
+    console.log(e)
+  }
+})
 </script>
 
 <template>
@@ -31,7 +45,7 @@ import ListSnickers from '@/components/ListSnickers/ListSnickers.vue'
       </div>
     </div>
 
-    <ListSnickers />
+    <ListSnickers :sneakers="sneakers" />
   </div>
 </template>
 

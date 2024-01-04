@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import type { CardProps } from './card-type'
 
-const { title, isAdded, imgSnicker, isFavorite, price, onClickFavorite, onClickAdd } =
-  defineProps<CardProps>()
+const {
+  title,
+  isAdded = false,
+  imgSnicker,
+  isFavorite = false,
+  price,
+  onClickFavorite,
+  onClickAdd
+} = defineProps<CardProps>()
 </script>
 
 <template>

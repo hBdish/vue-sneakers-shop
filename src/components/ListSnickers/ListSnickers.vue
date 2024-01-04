@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import TheCard from './components/card/TheCard.vue'
+import type { Sneaker } from '@/types/sneakers'
 
-const onAddClick = () => {
-  alert('click')
+interface ListSnickersProps {
+  sneakers: Sneaker[]
 }
+
+const { sneakers } = defineProps<ListSnickersProps>()
+
+const onAddClick = () => {}
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-4 mt-8">
-    <TheCard title="Nike" img-snicker="/sneakers/sneakers-1.jpg" :on-click-add="onAddClick" />
-    <TheCard />
-    <TheCard />
-    <TheCard />
-    <TheCard />
-    <TheCard />
-    <TheCard />
-    <TheCard />
+    <TheCard
+      v-for="sneaker in sneakers"
+      :key="sneaker.id"
+      :title="sneaker.title"
+      :price="sneaker.price"
+      :img-snicker="sneaker.imageUrl"
+      :on-click-add="onAddClick"
+      :on-click-favorite="onAddClick"
+    />
   </div>
 </template>
