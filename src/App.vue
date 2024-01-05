@@ -1,20 +1,39 @@
 <script setup lang="ts">
 import TheHeader from '@/components/TheHeader.vue'
 import ListSnickers from '@/components/ListSnickers/ListSnickers.vue'
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import { onMounted, reactive, ref, watch } from 'vue'
 import type { Sneaker } from '@/types/sneakers'
+import { Sort } from '@/types/sort'
+import snickersService from './services/api'
 
-let sneakers = ref<Sneaker[]>([])
+const sneakers = ref<Sneaker[]>([])
+
+const filters = reactive<{
+  sortBy: Sort
+  searchQuery: string
+}>({
+  sortBy: Sort.All,
+  searchQuery: ''
+})
 
 onMounted(async () => {
-  try {
-    const { data } = await axios.get<Sneaker[]>('http://localhost:1234/items')
-    sneakers.value = data
-  } catch (e) {
-    console.log(e)
-  }
+  sneakers.value = await snickersService.getSneakers()
 })
+
+watch(filters, async () => {
+  sneakers.value = await snickersService.getSneakers({
+    sortBy: filters.sortBy,
+    search: filters.searchQuery
+  })
+})
+
+const onChangeSelect = (event: Event) => {
+  filters.sortBy = (event.target as HTMLSelectElement).value as Sort
+}
+
+const onChangeSearch = (event: Event) => {
+  filters.searchQuery = (event.target as HTMLInputElement).value
+}
 </script>
 
 <template>
@@ -28,17 +47,19 @@ onMounted(async () => {
     <div class="flex justify-between items-center pt-8 pr-8 pl-8">
       <div class="flex gap-4">
         <select
-          class="py-2 text-3xl fixed font-bold border border-transparent hover:border-gray-200 rounded-md outline-none"
+          @change="onChangeSelect"
+          class="py-2 text-3xl font-bold border border-transparent hover:border-gray-200 rounded-md outline-none"
         >
-          <option>All Snickers</option>
-          <option>Name</option>
-          <option>Price</option>
+          <option :value="Sort.All">All Snickers</option>
+          <option :value="Sort.TITLE">Name</option>
+          <option :value="Sort.PRICE">Price</option>
         </select>
       </div>
 
       <div class="relative">
         <img src="/search.svg" alt="search" class="absolute left-2 top-3.5" />
         <input
+          @input="onChangeSearch"
           placeholder="search"
           class="border border-gray-200 rounded-md py-2 pl-8 pr-4 outline-none focus:border-gray-400"
         />

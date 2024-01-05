@@ -5,4 +5,4 @@ interface Sneaker {
   imageUrl: string
 }
 
-export type { Sneaker }
+export { Sneaker }
