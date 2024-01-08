@@ -3,6 +3,8 @@ interface Sneaker {
   title: string
   price: number
   imageUrl: string
+  isFavorite?: boolean
+  isAdded?: boolean
 }
 
-export { Sneaker }
+export type { Sneaker }

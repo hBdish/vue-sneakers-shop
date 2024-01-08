@@ -72,5 +72,20 @@
       "price": 13000,
       "imageUrl": "/sneakers/sneakers-12.jpg"
     }
-  ]
+  ],
+  "favorites": [
+    {
+      "id": "3JJ5KVK"
+    },
+    {
+      "id": "ZwpdfOL"
+    },
+    {
+      "id": "1"
+    },
+    {
+      "id": "6"
+    }
+  ],
+  "orders": []
 }

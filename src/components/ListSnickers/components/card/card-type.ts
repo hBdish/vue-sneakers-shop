@@ -4,8 +4,8 @@ interface Card {
   price: number
   isFavorite?: boolean
   isAdded?: boolean
-  onClickAdd: (payload: MouseEvent) => void
-  onClickFavorite: (payload: MouseEvent) => void
+  onClickAdd: (event: MouseEvent) => void
+  onClickFavorite: (event: MouseEvent) => void
 }
 
 export type CardProps = Card

@@ -20,6 +20,7 @@ const {
       :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
       alt="Like"
       class="absolute top-0 left-0 p-4"
+      @click="onClickFavorite"
     />
     <img :src="imgSnicker" alt="Snicker" />
 

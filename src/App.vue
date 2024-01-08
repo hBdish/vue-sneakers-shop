@@ -7,6 +7,7 @@ import { Sort } from '@/types/sort'
 import snickersService from './services/api'
 
 const sneakers = ref<Sneaker[]>([])
+const favoriteSneakers = ref<Sneaker[]>([])
 
 const filters = reactive<{
   sortBy: Sort
@@ -16,8 +17,26 @@ const filters = reactive<{
   searchQuery: ''
 })
 
+const addFavFlag = () => {
+  sneakers.value = sneakers.value.map((el) => {
+    const favorite = favoriteSneakers.value.find((favorite) => favorite.id === el.id)
+
+    if (!favorite) {
+      return el
+    }
+
+    return {
+      ...el,
+      isFavorite: true
+    }
+  })
+}
+
 onMounted(async () => {
   sneakers.value = await snickersService.getSneakers()
+
+  favoriteSneakers.value = await snickersService.getFavoriteSneakers()
+  addFavFlag()
 })
 
 watch(filters, async () => {
@@ -25,6 +44,7 @@ watch(filters, async () => {
     sortBy: filters.sortBy,
     search: filters.searchQuery
   })
+  addFavFlag()
 })
 
 const onChangeSelect = (event: Event) => {
