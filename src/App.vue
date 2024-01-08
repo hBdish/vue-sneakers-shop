@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import TheHeader from '@/components/TheHeader.vue'
 import ListSnickers from '@/components/ListSnickers/ListSnickers.vue'
-import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import type { Sneaker } from '@/types/sneakers'
 import { Sort } from '@/types/sort'
 import snickersService from './services/api'
 import TheDrawer from '@/components/Drawer/TheDrawer.vue'
 import TheBasket from '@/components/Basket/TheBasket.vue'
-import { AddToBasketKey, BasketItemsKey, ChangeDrawerOpenKey } from '@/injection-keys'
+import {
+  AddToBasketKey,
+  BasketItemsKey,
+  BasketItemsTotalKey,
+  ChangeDrawerOpenKey
+} from '@/injection-keys'
 
 const sneakers = ref<Sneaker[]>([])
 const basketItems = ref<Sneaker[]>([])
 const favoriteSneakers = ref<Sneaker[]>([])
 const drawerIsOpen = ref(false)
+const basketSum = computed(() =>
+  basketItems.value.reduce((prev, current) => {
+    return (prev += current.price)
+  }, 0)
+)
 
 const filters = reactive<{
   sortBy: Sort
@@ -22,13 +32,10 @@ const filters = reactive<{
   searchQuery: ''
 })
 
-watch(basketItems.value, () => {
-  console.log(basketItems.value)
-})
-
 provide(ChangeDrawerOpenKey, changeDrawerOpen)
 provide(AddToBasketKey, addToBasket)
-provide(BasketItemsKey, basketItems.value)
+provide(BasketItemsKey, basketItems)
+provide(BasketItemsTotalKey, basketSum)
 
 function changeDrawerOpen(event: Event) {
   drawerIsOpen.value = !drawerIsOpen.value
@@ -43,7 +50,6 @@ function addToBasket(sneaker: Sneaker) {
       basketItems.value.push(sneaker)
       sneaker.isAdded = true
     }
-    console.log(sneaker)
   }
 }
 

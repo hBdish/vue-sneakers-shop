@@ -3,15 +3,27 @@ import BasketHead from './components/BasketHead.vue'
 import BasketCardItem from '@/components/Basket/components/BasketCardItem.vue'
 import BasketFooter from '@/components/Basket/components/BasketFooter.vue'
 import { inject } from 'vue'
-import { BasketItemsKey, ChangeDrawerOpenKey } from '@/injection-keys'
+import {
+  AddToBasketKey,
+  BasketItemsKey,
+  BasketItemsTotalKey,
+  ChangeDrawerOpenKey
+} from '@/injection-keys'
+import snickersService from '@/services/api'
 
 const changeDrawerOpen = inject(ChangeDrawerOpenKey)
+const addToBasket = inject(AddToBasketKey)
 const basketItems = inject(BasketItemsKey)
+const total = inject(BasketItemsTotalKey)
 
-const sum =
-  basketItems?.reduce((prev, current) => {
-    return (prev += current.price)
-  }, 0) || 0
+const createOrder = async (event: Event) => {
+  if (basketItems === undefined || total === undefined) return
+  if (basketItems.value?.length > 0) {
+    await snickersService.createOrder(basketItems.value, total.value, () => {
+      basketItems.value = []
+    })
+  }
+}
 </script>
 
 <template>
@@ -25,9 +37,10 @@ const sum =
           :title="item.title"
           :price="item.price"
           :img-src="item.imageUrl"
+          :delete-from-basket="addToBasket?.(item)"
         />
       </div>
-      <BasketFooter :sum="sum" />
+      <BasketFooter :create-order="createOrder" :sum="total || 0" />
     </div>
   </div>
 </template>

@@ -57,6 +57,27 @@ class SneakersService {
       console.log(e)
     }
   }
+
+  async createOrder(items: Sneaker[], total: number, callback?: () => void) {
+    try {
+      await axios.post(
+        'http://localhost:1234/orders',
+        {
+          items,
+          total
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      callback && callback()
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export default new SneakersService()

@@ -3,9 +3,10 @@ interface BasketIemProps {
   title: string
   price: number
   imgSrc: string
+  deleteFromBasket?: (event: Event) => void
 }
 
-const { title, price, imgSrc } = defineProps<BasketIemProps>()
+const { title, price, imgSrc, deleteFromBasket } = defineProps<BasketIemProps>()
 </script>
 
 <template>
@@ -18,6 +19,7 @@ const { title, price, imgSrc } = defineProps<BasketIemProps>()
       <div class="flex justify-between mt-2">
         <b>{{ price }} rub</b>
         <img
+          @click="deleteFromBasket"
           src="/close.svg"
           alt="Close"
           class="opacity-30 transition cursor-pointer hover:opacity-100"

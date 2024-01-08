@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { Sneaker } from '@/types/sneakers'
 
 const createInjectionKeyForAction = <T, V = void>(key: string) => {
@@ -16,6 +16,7 @@ const AddToBasketKey = createInjectionKeyForAction<Sneaker, (event: Event) => vo
   'AddToBasketKey'
 )
 
-const BasketItemsKey = createInjectionKeyForProperty<Sneaker[]>('BasketItems')
+const BasketItemsKey = createInjectionKeyForProperty<Ref<Sneaker[]>>('BasketItems')
+const BasketItemsTotalKey = createInjectionKeyForProperty<Ref<number>>('BasketItemsTotal')
 
-export { AddToBasketKey, ChangeDrawerOpenKey, BasketItemsKey }
+export { AddToBasketKey, ChangeDrawerOpenKey, BasketItemsKey, BasketItemsTotalKey }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { ChangeDrawerOpenKey } from '@/injection-keys'
+import { BasketItemsTotalKey, ChangeDrawerOpenKey } from '@/injection-keys'
 
 const changeDrawerOpen = inject(ChangeDrawerOpenKey)
+const total = inject(BasketItemsTotalKey)
 </script>
 
 <template>
@@ -21,7 +22,7 @@ const changeDrawerOpen = inject(ChangeDrawerOpenKey)
         class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold"
       >
         <img src="/cart.svg" alt="Cart" />
-        <span>1200 rub</span>
+        <span>{{ total }} rub</span>
       </li>
       <li class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold">
         <img src="/heart.svg" alt="Heart" />
