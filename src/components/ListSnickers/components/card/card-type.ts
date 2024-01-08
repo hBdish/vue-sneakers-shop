@@ -4,7 +4,7 @@ interface Card {
   price: number
   isFavorite?: boolean
   isAdded?: boolean
-  onClickAdd: (event: MouseEvent) => void
+  onClickAdd?: (event: MouseEvent) => void
   onClickFavorite: (event: MouseEvent) => void
 }
 

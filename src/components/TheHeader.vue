@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { inject } from 'vue'
+import { ChangeDrawerOpenKey } from '@/injection-keys'
+
+const changeDrawerOpen = inject(ChangeDrawerOpenKey)
+</script>
+
 <template>
   <header class="flex justify-between border-b border-slate-300 px-16 py-8">
     <div class="flex items-center gap-4">
@@ -9,7 +16,10 @@
     </div>
 
     <ul class="flex items-center gap-4 text-slate-600">
-      <li class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold">
+      <li
+        @click="changeDrawerOpen"
+        class="flex items-center gap-1 cursor-pointer hover:text-black hover:font-bold"
+      >
         <img src="/cart.svg" alt="Cart" />
         <span>1200 rub</span>
       </li>
@@ -20,4 +30,3 @@
     </ul>
   </header>
 </template>
-<script setup lang="ts"></script>

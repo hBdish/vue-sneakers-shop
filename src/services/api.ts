@@ -30,7 +30,7 @@ class SneakersService {
     }
   }
 
-  async postFavoriteSneakers(id: string) {
+  async postFavoriteSneakers(id: string, callback?: () => void) {
     try {
       await axios.post(
         'http://localhost:1234/favorites',
@@ -43,14 +43,16 @@ class SneakersService {
           }
         }
       )
+      callback && callback()
     } catch (e) {
       console.log(e)
     }
   }
 
-  async deleteFavoriteSneakers(id: string) {
+  async deleteFavoriteSneakers(id: string, callback?: () => void) {
     try {
       await axios.delete('http://localhost:1234/favorites/' + id)
+      callback && callback()
     } catch (e) {
       console.log(e)
     }

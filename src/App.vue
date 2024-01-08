@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import TheHeader from '@/components/TheHeader.vue'
 import ListSnickers from '@/components/ListSnickers/ListSnickers.vue'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, provide, reactive, ref, watch } from 'vue'
 import type { Sneaker } from '@/types/sneakers'
 import { Sort } from '@/types/sort'
 import snickersService from './services/api'
+import TheDrawer from '@/components/Drawer/TheDrawer.vue'
+import TheBasket from '@/components/Basket/TheBasket.vue'
+import { AddToBasketKey, BasketItemsKey, ChangeDrawerOpenKey } from '@/injection-keys'
 
 const sneakers = ref<Sneaker[]>([])
+const basketItems = ref<Sneaker[]>([])
 const favoriteSneakers = ref<Sneaker[]>([])
+const drawerIsOpen = ref(false)
 
 const filters = reactive<{
   sortBy: Sort
@@ -17,18 +22,42 @@ const filters = reactive<{
   searchQuery: ''
 })
 
+watch(basketItems.value, () => {
+  console.log(basketItems.value)
+})
+
+provide(ChangeDrawerOpenKey, changeDrawerOpen)
+provide(AddToBasketKey, addToBasket)
+provide(BasketItemsKey, basketItems.value)
+
+function changeDrawerOpen(event: Event) {
+  drawerIsOpen.value = !drawerIsOpen.value
+}
+
+function addToBasket(sneaker: Sneaker) {
+  return (event: Event) => {
+    if (sneaker.isAdded) {
+      basketItems.value.splice(basketItems.value.indexOf(sneaker), 1)
+      sneaker.isAdded = false
+    } else {
+      basketItems.value.push(sneaker)
+      sneaker.isAdded = true
+    }
+    console.log(sneaker)
+  }
+}
+
 const addFavFlag = () => {
   sneakers.value = sneakers.value.map((el) => {
     const favorite = favoriteSneakers.value.find((favorite) => favorite.id === el.id)
 
-    if (!favorite) {
-      return el
-    }
+    if (favorite)
+      return {
+        ...el,
+        isFavorite: true
+      }
 
-    return {
-      ...el,
-      isFavorite: true
-    }
+    return el
   })
 }
 
@@ -57,11 +86,11 @@ const onChangeSearch = (event: Event) => {
 </script>
 
 <template>
-  <!--  <TheDrawer>-->
-  <!--    <template v-slot:Basket>-->
-  <!--      <TheBasket />-->
-  <!--    </template>-->
-  <!--  </TheDrawer>-->
+  <TheDrawer v-if="drawerIsOpen">
+    <template v-slot:Basket>
+      <TheBasket />
+    </template>
+  </TheDrawer>
   <div class="m-auto w-4/5 rounded-xl shadow-xl mt-8 bg-white">
     <TheHeader />
     <div class="flex justify-between items-center pt-8 pr-8 pl-8">
